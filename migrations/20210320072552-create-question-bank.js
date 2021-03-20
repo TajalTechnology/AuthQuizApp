@@ -12,7 +12,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       question_types: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        values: ['written', 'quiz'],
       },
       status: {
         type: Sequelize.INTEGER
@@ -21,6 +22,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      quizs: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull:true,
+    },
+    correct_answer:{
+      type: Sequelize.ARRAY(Sequelize.STRING),
+    },
+    
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

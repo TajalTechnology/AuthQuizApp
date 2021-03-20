@@ -4,17 +4,15 @@ const Question_bank = require('../models').Question_bank
 module.exports = {
 
     quizAdd: (req, res) => {
-        let { a, b, c, d, correct_answer, question_id } = req.body
+        let { quiz_question, options, correct_answer} = req.body
+        console.log(options);
 
         Quiz.create({
-            a,
-            b,
-            c,
-            d,
+            quiz_question,
             correct_answer,
-            question_id,
         })
             .then(quizs => {
+                console.log('15');
                 return res.status(201).json({
                     quizs
                 })//return

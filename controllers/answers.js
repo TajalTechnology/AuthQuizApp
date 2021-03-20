@@ -1,88 +1,94 @@
+const Answer = require('../models').Answer
 const Question_bank = require('../models').Question_bank
-
 
 module.exports = {
 
-    questionTypes: async(req, res) =>{
-        const values = await Question_bank.rawAttributes.question_types.values;
-        return res.status(201).json({
-            values
-        })
-    },
+    add: async (req, res) => {
 
-    addQuestion: async (req, res) => {
+        let {user_id, question_id } = req.body
+        let answer, quiz_answer, score;
 
-        let {question, question_types, status,user_id} = req.body
-        let quizs,correct_answer
-        // req.body.quizs?req.body.quizs:null;
-        if(req.body.quizs){
-            quizs = req.body.quizs,
-            correct_answer = req.body.correct_answer
-        }else{
-            quizs = null,
-            correct_answer = null
-        }
+        const question_info = await Question_bank.findOne({where:{id:question_id}})
+        console.log(question_info.correct_answer);
+
         
-        if(req.body.question_types =='written' || req.body.question_types =='quiz' || req.body.question_types == null){
-            Question_bank.create({
-                question,
-                question_types,
-                status,
-                user_id,
-                quizs:quizs,
-                correct_answer:correct_answer
-            })
-                .then(question => {
-                    if(!question){
-                        return res.status(201).json({
-                            "message":"Question didn't create"
-                        })
-                    }
-                
-                    return res.status(201).json({
-                        question
-                    })
-                }).catch(error => {
-                    return res.status(400).json({error})
-                })
-        }else{
+        
+
+        if(!req.body.quiz_answer){
+            answer = req.body.answer
+            quiz_answer = null
+        }else if(!req.body.answer){
+            quiz_answer = req.body.quiz_answer
+           answer = null
+        }else if(req.body.quiz_answer && req.body.answer){
             return res.status(201).json({
-                "message":"Question types are not allow"
+                "message":"Please select your correct answer types"
             })
         }
+
+        if(question_info.correct_answer.sort().toString()==quiz_answer.sort().toString()){
+            score = 1
+        }else{
+            score = 0
+        }
+
+
+        Answer.create({
+            answer:answer,
+            score:score,
+            quiz_answer:quiz_answer,
+            user_id,
+            question_id,
+        })
+            .then(answer => {
+             
+                if (!answer) {
+                    return res.status(201).json({
+                        "message": "answer didn't create"
+                    })
+                }
+
+                return res.status(201).json({
+                    answer
+                })
+            }).catch(error => {
+                return res.status(400).json({ error })
+            })
+
+
 
     },//end addQuestion.
 
     updateQuestion: (req, res) => {
 
-        let {question, question_types, status} = req.body
+        let { question, question_types, status } = req.body
         let id = req.params.id
 
         Question_bank.findOne({
             where: {
-                id:id
+                id: id
             }
         })
             .then(questions => {
 
-                if(!questions){
+                if (!questions) {
                     return res.status(401).json({
                         "message": "didn't find any question"
                     })
                 }
-                
-                questions.update({question, question_types, status})
+
+                questions.update({ question, question_types, status })
                     .then(update_question => {
                         return res.status(202).json({
                             update_question
                         })//return
                     }).catch(error => {
-                        return res.status(400).json({"error": error})
+                        return res.status(400).json({ "error": error })
                     })
-                
+
             }).catch(error => {
-            return res.status(400).json({"error": error})
-        })
+                return res.status(400).json({ "error": error })
+            })
     },//end updateQuestion.
 
     deleteQuestion: (req, res) => {
@@ -90,11 +96,11 @@ module.exports = {
 
         Question_bank.destroy({
             where: {
-                id:id
+                id: id
             }
         })
             .then(question => {
-                if(!question){
+                if (!question) {
                     return res.status(401).json({
                         "message": "Question not found"
                     })//return
@@ -105,8 +111,8 @@ module.exports = {
                     })//return
                 }
             }).catch(error => {
-            return res.status(400).json({error})
-        })
+                return res.status(400).json({ error })
+            })
     },//end deleteQuestion.
 
     questionList: (req, res) => {
@@ -118,22 +124,22 @@ module.exports = {
         let limit = 10
         let offset = page ? (page - 1) * limit : 0;
         //sequelize query
-        let where = [{approval: true}]
-        title ? where.push({title: {[Op.like]: '%' + title + '%'}}) : !title;
-        tag ? where.push({tags: {[Op.contains]: [tag]}}) : !tag;
+        let where = [{ approval: true }]
+        title ? where.push({ title: { [Op.like]: '%' + title + '%' } }) : !title;
+        tag ? where.push({ tags: { [Op.contains]: [tag] } }) : !tag;
 
         Question.findAndCountAll({
             limit: limit,
             offset: offset,
             where: where,
-            attributes: ['id', 'title', 'body', 'tags', 'approval', 'viewCount','createdAt', 'updatedAt',
+            attributes: ['id', 'title', 'body', 'tags', 'approval', 'viewCount', 'createdAt', 'updatedAt',
                 [db.sequelize.fn('COUNT', db.sequelize.col('Answers.id')), 'count']],
             include: [
                 {
                     model: User,
                     attributes: ['userName']
                 },
-                {model: Answer, attributes: []}
+                { model: Answer, attributes: [] }
             ],
             group: ['Question.id', 'User.id'],
             subQuery: false,
@@ -153,8 +159,8 @@ module.exports = {
                 })//return
 
             }).catch(error => {
-            return res.status(400).json({error})
-        })
+                return res.status(400).json({ error })
+            })
 
     },//end questionList.
     question: (req, res) => {
@@ -162,7 +168,7 @@ module.exports = {
         let id = req.params.id
 
         Question_bank.findOne({
-            where: {id: id}
+            where: { id: id }
         })
             .then(question => {
 
@@ -177,8 +183,8 @@ module.exports = {
                 }
 
             }).catch(error => {
-            return res.status(400).json({error})
-        })
+                return res.status(400).json({ error })
+            })
     },//end singleQuestion.
 
 }

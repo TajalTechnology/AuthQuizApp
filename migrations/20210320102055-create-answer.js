@@ -11,6 +11,9 @@ module.exports = {
       answer: {
         type: Sequelize.STRING
       },
+      quiz_answer:{
+        type: Sequelize.ARRAY(Sequelize.STRING)
+      },
       score: {
         type: Sequelize.INTEGER
       },

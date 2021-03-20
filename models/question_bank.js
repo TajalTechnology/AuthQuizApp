@@ -4,16 +4,10 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Question_bank extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+
     static associate(models) {
-      // define association here
-      Question_bank.hasOne(models.Quiz, {
-        foreignKey: 'question_id'
-      });
+
+
 
       Question_bank.hasOne(models.Answer, {
         foreignKey: 'question_id'
@@ -28,8 +22,17 @@ module.exports = (sequelize, DataTypes) => {
   };
   Question_bank.init({
     question: DataTypes.STRING,
-    question_types: DataTypes.STRING,
-    status: DataTypes.INTEGER
+    // question_types: DataTypes.STRING,
+    question_types: {
+      type:   DataTypes.STRING,
+      values: ['written', 'quiz'],
+      defaultValue:'quiz',
+      
+    },
+    status: DataTypes.INTEGER,
+    quizs:DataTypes.ARRAY(DataTypes.STRING),
+    correct_answer:DataTypes.ARRAY(DataTypes.STRING),
+   
   }, {
     sequelize,
     modelName: 'Question_bank',

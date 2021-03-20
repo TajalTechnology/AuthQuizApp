@@ -5,19 +5,15 @@ const {authVerify} = require('../middleware/auth')
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const { 
-    addQuestion,
-    updateQuestion,
-    deleteQuestion,
-    question,
-    questionTypes,
- } = require('../controllers/questionBanks')
+    add,
+ } = require('../controllers/answers')
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~User Routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-router.post('/question-bank', addQuestion);
-router.put('/question-bank/:id', updateQuestion);
-router.delete('/question-bank/:id', deleteQuestion);
-router.get('/question-bank/:id', question);
-router.get('/question-types', questionTypes);
+router.post('/answer', add);
+// router.put('/question-bank/:id', updateQuestion);
+// router.delete('/question-bank/:id', deleteQuestion);
+// router.get('/question-bank/:id', question);
+// router.get('/question-types', questionTypes);
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Router Export~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

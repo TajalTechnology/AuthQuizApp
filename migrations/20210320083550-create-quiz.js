@@ -8,24 +8,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      a: {
+      quiz_question:{
         type: Sequelize.STRING
       },
-      b: {
-        type: Sequelize.STRING
-      },
-      c: {
-        type: Sequelize.STRING
-      },
-      d: {
-        type: Sequelize.STRING
+      options:{
+        type: Sequelize.STRING,
       },
       correct_answer: {
         type: Sequelize.STRING
-      },
-      question_id:{
-        type: Sequelize.INTEGER,
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,

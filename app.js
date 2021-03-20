@@ -15,30 +15,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs")
 
-// cors setting
-const whitelist = [
-    'http://localhost/',
-    'http://example2.com'
-]
-const corsOptions = {
-        origin: function(origin, callback) {
-            if (whitelist.indexOf(origin) !== -1) {
-                callback(null, true)
-            } else {
-                callback(new Error('Not allowed by CORS'))
-            }
-        }
-    }
-    //port
-app.listen(process.env.PORT, (req, res) => {
-    console.log('App Running on port:' + process.env.PORT)
+app.listen(3000, (req, res) => {
+    console.log('App Running on port:'+ 3000)
 })
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Import Routers~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const user = require('./routers/users')
+const questionbank = require('./routers/questionBanks')
+const quiz = require('./routers/quizs')
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Routers Root~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 app.get("/", (req, res) => res.render("home"))
 app.use('/api', user)
+app.use('/api', questionbank)
+app.use('/api', quiz)

@@ -6,17 +6,17 @@ const {authVerify} = require('../middleware/auth')
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Imports~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const { 
-    signIn,
-    signUp, 
-    getUsers, 
- } = require('../controllers/users')
-
+    quizAdd,
+    quizUpdate,
+    quizDelete,
+    getQuizs
+ } = require('../controllers/quizs')
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~User Routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-router.post('/sign-in', signIn)
-router.post('/sign-up', signUp)
-
-router.get('/getValue1', getUsers)
+router.post('/quiz', quizAdd);
+router.put('/quiz/:id', quizUpdate);
+router.delete('/quiz/:id', quizDelete);
+router.get('/quiz/:id', getQuizs);
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Router Export~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

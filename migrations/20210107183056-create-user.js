@@ -8,7 +8,7 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            userName: {
+            name: {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
@@ -19,33 +19,6 @@ module.exports = {
             password: {
                 type: Sequelize.STRING,
                 allowNull: true,
-            },
-            firstName: {
-                type: Sequelize.STRING,
-                allowNull: true,
-            },
-            lastName: {
-                type: Sequelize.STRING,
-                allowNull: true,
-            },
-            isSuperuser: {
-                type: Sequelize.BOOLEAN,
-                allowNull: true,
-            },
-            userPermissions: {
-                type: Sequelize.ARRAY(Sequelize.STRING),
-                allowNull: true,
-            },
-            userProfile: {
-                type: Sequelize.STRING,
-                allowNull: true,
-            },
-            verifyToken:{
-                type: Sequelize.STRING,
-            },
-            emailVerify:{
-                type: Sequelize.BOOLEAN,
-                defaultValue: false
             },
             createdAt: {
                 allowNull: false,

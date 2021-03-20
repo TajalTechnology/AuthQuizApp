@@ -11,20 +11,20 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            User.hasMany(models.Question_bank, {
+                foreignKey: 'user_id'
+            });
+
+            User.hasMany(models.Answer, {
+                foreignKey: 'user_id'
+            });
         }
     };
 
     User.init({
-        userName: DataTypes.STRING,
+        name: DataTypes.STRING,
         email: DataTypes.STRING,
         password: DataTypes.STRING,
-        firstName: DataTypes.STRING,
-        lastName: DataTypes.STRING,
-        isSuperuser: DataTypes.BOOLEAN,
-        userPermissions: DataTypes.ARRAY(DataTypes.STRING),
-        userProfile: DataTypes.STRING,
-        verifyToken:DataTypes.STRING,
-        emailVerify:DataTypes.BOOLEAN
     }, {
         sequelize,
         modelName: 'User',

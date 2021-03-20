@@ -2,18 +2,12 @@
 #To install this in your local
 
   1.clone this repo
-  
-  2.run => npm install
-  
-  3.run => npm start
 
+  2.create a repo "quix_app"
 
-To install this in your docker
+  3.run => npx sequelize-cli db:migrate
+  
+  4.run => nodemon
+  
+  
 
-  1.clone this repo
-  
-  2.run => npm install 
-  
-  3.run => docker-compose build --no-cache --force-rm
-  
-  4.run => docker-compose up

@@ -8,6 +8,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+app.use(cors())
 const bodyParser = require('body-parser')
 const envFileConfig = require('dotenv').config()
 app.use(express.json());

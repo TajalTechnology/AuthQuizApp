@@ -9,7 +9,7 @@ const {
     updateQuestion,
     deleteQuestion,
     question,
-    questionTypes,
+    questionList,
  } = require('../controllers/questionBanks')
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~User Routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -17,7 +17,7 @@ router.post('/question-bank', addQuestion);
 router.put('/question-bank/:id', updateQuestion);
 router.delete('/question-bank/:id', deleteQuestion);
 router.get('/question-bank/:id', question);
-router.get('/question-types', questionTypes);
+router.get('/question-bank', questionList);
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Router Export~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -8,15 +8,12 @@ const {authVerify} = require('../middleware/auth')
 const { 
     signIn,
     signUp, 
-    getUsers, 
  } = require('../controllers/users')
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~User Routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 router.post('/sign-in', signIn)
 router.post('/sign-up', signUp)
-
-router.get('/getValue1', getUsers)
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Router Export~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

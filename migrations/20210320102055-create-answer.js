@@ -9,19 +9,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       answer: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      quiz_answer:{
-        type: Sequelize.ARRAY(Sequelize.STRING)
+      quiz_answer: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
       },
       score: {
         type: Sequelize.INTEGER
       },
-      user_id:{
+      user_id: {
         type: Sequelize.INTEGER,
+        defaultValue: 1,
         allowNull: false,
       },
-      question_id:{
+      question_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },

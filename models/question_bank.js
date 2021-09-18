@@ -7,32 +7,32 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
 
-
-
       Question_bank.hasOne(models.Answer, {
+        onDelete: 'CASCADE',
         foreignKey: 'question_id'
       });
 
       Question_bank.belongsTo(models.User, {
-        // onDelete: 'CASCADE',
+        onDelete: 'CASCADE',
         foreignKey: 'user_id'
-    });
+      });
 
     }
   };
   Question_bank.init({
     question: DataTypes.STRING,
-    // question_types: DataTypes.STRING,
     question_types: {
-      type:   DataTypes.STRING,
+      type: DataTypes.STRING,
       values: ['written', 'quiz'],
-      defaultValue:'quiz',
-      
+      defaultValue: 'quiz',
     },
-    status: DataTypes.INTEGER,
-    quizs:DataTypes.ARRAY(DataTypes.STRING),
-    correct_answer:DataTypes.ARRAY(DataTypes.STRING),
-   
+    status: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
+    },
+    quizs: DataTypes.ARRAY(DataTypes.STRING),
+    correct_answer: DataTypes.ARRAY(DataTypes.STRING),
+
   }, {
     sequelize,
     modelName: 'Question_bank',

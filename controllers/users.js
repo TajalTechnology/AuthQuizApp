@@ -5,43 +5,32 @@ const jwt = require('jsonwebtoken')
 module.exports = {
 
     signIn: (req, res) => {
-        console.log('Hello');
-        const SECRET_KEY = "mdtajalislam1189@gmail.com"
-        const {email, password} = req.body
+        const SECRET_KEY = process.env.SECRET_KEY
+        let { email, password } = req.body
 
         User.findOne({
-            where: {
-                email:email
-            }
+            where: {email: email}
         })
             .then(user => {
-                
                 if (!user) {
                     return res.status(401).json({
-                        "message": "You are not able to login"
+                        "message": "You are not register user. Plz Register."
                     })
-                }//if
-
+                }
                 if (user) {
-
                     if (bcrypt.compareSync(password, user.password)) {
-
                         const data = {
-                            "name":user.name,
-                            "email":user.email
+                            "name": user.name,
+                            "email": user.email
                         }
-                
                         const token = jwt.sign(data, SECRET_KEY)
-
                         return res.status(200).json({
                             "data": {
                                 "message": "login success",
                                 "token": "Bearer " + token
                             }
                         })
-
-                    }//if
-
+                    }
                     else {
                         return res.status(401).json({
                             "data": {
@@ -49,46 +38,31 @@ module.exports = {
                             }
                         })
                     }
-
-                }//if
+                }
             }).catch(error => {
-            return res.status(400).json({error})
-        })
+                return res.status(400).json({ error })
+            })
 
     },//end signIn
 
+    signUp: (req, res) => {
 
-    signUp:(req, res) => {
-    
-        let {name,
-            email,
-            password
-        } = req.body
+        let { name, email, password } = req.body
         let hash = bcrypt.hashSync(password, 10)
-
-        User.create(
-            {
-            name,
-            email,
-            password:hash,
-            }
-            )
+        User.create({ name, email, password: hash, })
             .then(user => {
-                return res.status(422).json({
+                if (!user) {
+                    return res.status(200).json({
+                        "message": "Registration Failed",
+                    })
+                }
+                return res.status(200).json({
+                    "message": "Registration suceessfully",
                     user
                 })
             }).catch(err => {
                 res.status(500).json({
                     message: err.message || "Some error occurred while creating"
-                })
-            })
-    },
-
-    getUsers: (req, res) => {
-        User.findAll()
-            .then(users => {
-                return res.status(422).json({
-                    users
                 })
             })
     }

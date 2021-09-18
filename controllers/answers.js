@@ -1,63 +1,79 @@
 const Answer = require('../models').Answer
 const Question_bank = require('../models').Question_bank
+const { Op } = require('sequelize')
 
 module.exports = {
 
     add: async (req, res) => {
 
-        let {user_id, question_id } = req.body
+        let { question_id } = req.body
+        let user_id = 2
         let answer, quiz_answer, score;
+        const question_info = await Question_bank.findOne({ where: { id: question_id } })
 
-        const question_info = await Question_bank.findOne({where:{id:question_id}})
-        console.log(question_info.correct_answer);
-
-        
-        
-
-        if(!req.body.quiz_answer){
+        if (question_info.question_types === 'written') {
             answer = req.body.answer
             quiz_answer = null
-        }else if(!req.body.answer){
+        } else if (question_info.question_types === 'quiz') {
             quiz_answer = req.body.quiz_answer
-           answer = null
-        }else if(req.body.quiz_answer && req.body.answer){
+            answer = null
+        } else if (req.body.quiz_answer && req.body.answer) {
             return res.status(201).json({
-                "message":"Please select your correct answer types"
+                "message": "You do not put any answer's at all"
             })
         }
 
-        if(question_info.correct_answer.sort().toString()==quiz_answer.sort().toString()){
+        if (question_info.question_types === "quiz" && question_info.correct_answer.sort().toString() === quiz_answer.sort().toString()) {
             score = 1
-        }else{
-            score = 0
+        } else {
+            score = null
         }
 
-
         Answer.create({
-            answer:answer,
-            score:score,
-            quiz_answer:quiz_answer,
+            answer,
+            score,
+            quiz_answer,
             user_id,
             question_id,
         })
             .then(answer => {
-             
+
                 if (!answer) {
                     return res.status(201).json({
                         "message": "answer didn't create"
                     })
                 }
-
                 return res.status(201).json({
                     answer
                 })
             }).catch(error => {
                 return res.status(400).json({ error })
             })
-
-
-
     },//end addQuestion.
+
+    score: async (req, res)=>{
+        let user_id = 1
+        
+        const totalAnswers = await Answer.count({
+            where:{ user_id : 1 }
+        })
+
+        const totalScores = await Answer.count({
+            where:{
+                [Op.and]:[
+                    {user_id:1},
+                    {score:1}
+                ]
+            }
+            
+        })
+
+        return res.status(401).json({
+            totalAnswers,
+            totalScores
+        })
+
+    },
 
     updateQuestion: (req, res) => {
 
@@ -115,56 +131,7 @@ module.exports = {
             })
     },//end deleteQuestion.
 
-    questionList: (req, res) => {
-
-        let title = req.query.title
-        let tag = req.query.tag
-        let page = parseInt(req.query.page);
-        page = page ? page : 1
-        let limit = 10
-        let offset = page ? (page - 1) * limit : 0;
-        //sequelize query
-        let where = [{ approval: true }]
-        title ? where.push({ title: { [Op.like]: '%' + title + '%' } }) : !title;
-        tag ? where.push({ tags: { [Op.contains]: [tag] } }) : !tag;
-
-        Question.findAndCountAll({
-            limit: limit,
-            offset: offset,
-            where: where,
-            attributes: ['id', 'title', 'body', 'tags', 'approval', 'viewCount', 'createdAt', 'updatedAt',
-                [db.sequelize.fn('COUNT', db.sequelize.col('Answers.id')), 'count']],
-            include: [
-                {
-                    model: User,
-                    attributes: ['userName']
-                },
-                { model: Answer, attributes: [] }
-            ],
-            group: ['Question.id', 'User.id'],
-            subQuery: false,
-        })
-            .then(questions => {
-
-                const totalQuestion = questions.count.length
-                const totalPage = Math.ceil(totalQuestion / limit);
-
-                return res.status(200).json({
-                    "pagination": {
-                        "totalPage": totalPage,
-                        "current_page": page,
-                        "totalQuestion": totalQuestion,
-                    },
-                    "questions": questions.rows,
-                })//return
-
-            }).catch(error => {
-                return res.status(400).json({ error })
-            })
-
-    },//end questionList.
     question: (req, res) => {
-
         let id = req.params.id
 
         Question_bank.findOne({
@@ -173,6 +140,7 @@ module.exports = {
             .then(question => {
 
                 if (question) {
+
                     return res.status(200).json({
                         question
                     })
